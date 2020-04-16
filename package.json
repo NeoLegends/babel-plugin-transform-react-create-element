@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "prettier": "prettier --write \"{src,tests}/**/*.{jsx,ts}\""
+    "prettier": "prettier --write \"src/**/*.ts\" && prettier --write \"tests/*.js\""
   },
   "author": "Moritz Gunz <moritz.gunz@gmail.com>",
   "license": "MIT",
