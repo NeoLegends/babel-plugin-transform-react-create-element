@@ -1,4 +1,4 @@
-# babel-plugin-transform-react-imports
+# babel-plugin-transform-react-create-element
 
 Shorten JSX `React.createElement` calls using a local variable.
 

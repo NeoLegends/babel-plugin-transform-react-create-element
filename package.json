@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-transform-react-imports",
+  "name": "babel-plugin-transform-react-create-element",
   "version": "0.1.0",
   "description": "Shorten JSX React.createElement calls using a local variable.",
   "main": "src/index.js",
