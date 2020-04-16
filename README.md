@@ -34,7 +34,21 @@ const Component = () => (
 );
 ```
 
-This plugin respects existing `/** @jsx some-jsx-pragma */` pragmas and does not modify them.
+## How?
+
+In your `.babelrc`:
+
+```
+{
+  "plugins": [
+    "babel-plugin-transform-react-create-element",
+  ]
+}
+```
+
+It works by inserting a JSX pragma that points to the local variable. Hence, it needs to run before any JSX compilers. If you're using `@babel/preset-react` everything will work out of the box. If you're using `@babel/plugin-transform-react-jsx` directly, make sure to list this plugin before it.
+
+This plugin _does_ respect any existing JSX pragmas in the file and does not modify them.
 
 ## Why?
 
