@@ -1,5 +1,5 @@
+import { Visitor } from '@babel/core';
 import template from "@babel/template";
-import { Visitor } from "@babel/traverse";
 import * as types from "@babel/types";
 
 const LOCAL_VARIABLE_TEMPLATE = template(`
