@@ -1,5 +1,9 @@
 yarn-error.log
 node_modules/
 
+# Build Output
 *.js
 !tests/**/*.js
+
+*.d.ts
+*.map
