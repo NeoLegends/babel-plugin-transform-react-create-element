@@ -1,4 +1,4 @@
-import { Visitor } from '@babel/core';
+import { Visitor } from "@babel/core";
 import template from "@babel/template";
 import * as types from "@babel/types";
 
@@ -8,8 +8,15 @@ const LOCAL_VARIABLE_TEMPLATE = template(`
 const PRAGMA_ELEM_NAME = "createElement";
 
 const transform = () => {
-  let hasInsertedJsxLocalVariable = false;
   let createElementIdent: types.Identifier;
+  let hasInsertedJsxLocalVariable = false;
+  let usesJsx = false;
+
+  const checkUsesJsxVisitor: Visitor = {
+    JSX() {
+      usesJsx = true;
+    },
+  };
 
   const insertingVisitor: Visitor = {
     ImportDeclaration(path) {
@@ -36,41 +43,47 @@ const transform = () => {
   };
 
   const programVisitor: Visitor = {
-    Program: {
-      enter(path, { file }: any) {
-        /*
-         * Check if we already have an existing pragma in the source code and if so,
-         * leave the file be.
-         */
-        const alreadyContainsJsxPragma = file.ast.comments.some(
-          (c: types.Comment) => c.value.indexOf("@jsx") !== -1,
-        );
-        if (alreadyContainsJsxPragma) {
-          return;
-        }
+    Program(path, { file }: any) {
+      /*
+       * Check if we already have an existing pragma in the source code and if so,
+       * leave the file be.
+       */
+      const alreadyContainsJsxPragma = file.ast.comments.some(
+        (c: types.Comment) => c.value.indexOf("@jsx") !== -1,
+      );
+      if (alreadyContainsJsxPragma) {
+        return;
+      }
 
-        createElementIdent = path.scope.generateUidIdentifier(PRAGMA_ELEM_NAME);
-        path.traverse(insertingVisitor);
+      /*
+       * Leave the file be if it doesn't use any JSX.
+       */
+      path.traverse(checkUsesJsxVisitor);
+      if (!usesJsx) {
+        return;
+      }
 
-        if (!hasInsertedJsxLocalVariable) {
-          return;
-        }
+      createElementIdent = path.scope.generateUidIdentifier(PRAGMA_ELEM_NAME);
+      path.traverse(insertingVisitor);
 
-        const commentText = `* @jsx ${createElementIdent.name} `;
-        path.addComment("leading", commentText);
+      if (!hasInsertedJsxLocalVariable) {
+        return;
+      }
 
-        /*
-         * Because babel doesn't reparse the source code, our new comment does not
-         * show up in `file.ast.comments`, where @babel/plugin-transform-react-jsx
-         * expects it.
-         *
-         * Hence add it manually.
-         */
-        const insertedCommentNode = path.node.leadingComments?.find(
-          (c) => c.value === commentText,
-        )!;
-        file.ast.comments.push(insertedCommentNode);
-      },
+      const commentText = `* @jsx ${createElementIdent.name} `;
+      path.addComment("leading", commentText);
+
+      /*
+       * Because babel doesn't reparse the source code, our new comment does not
+       * show up in `file.ast.comments`, where @babel/plugin-transform-react-jsx
+       * expects it.
+       *
+       * Hence add it manually.
+       */
+      const insertedCommentNode = path.node.leadingComments?.find(
+        (c) => c.value === commentText,
+      )!;
+      file.ast.comments.push(insertedCommentNode);
     },
   };
 
