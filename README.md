@@ -59,3 +59,5 @@ Also created to solve https://github.com/facebook/create-react-app/issues/5435.
 ## License
 
 MIT
+
+Loosely based on https://github.com/facebook/create-react-app/pull/6219.
