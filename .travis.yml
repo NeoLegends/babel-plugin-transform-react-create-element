@@ -6,3 +6,11 @@ node_js:
 script:
   - yarn build
   - yarn test
+
+deploy:
+  provider: npm
+  edge: true
+  skip_cleanup: true
+  on:
+    node_js: 12
+    tags: true
