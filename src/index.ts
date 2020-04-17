@@ -1,4 +1,4 @@
-import { Visitor } from "@babel/core";
+import { NodePath, Visitor } from "@babel/core";
 import template from "@babel/template";
 import * as types from "@babel/types";
 
@@ -37,7 +37,13 @@ const transform = () => {
         return;
       }
 
-      path.insertAfter(LOCAL_VARIABLE_TEMPLATE({ pragma: createElementIdent }));
+      const declaration = LOCAL_VARIABLE_TEMPLATE({
+        pragma: createElementIdent,
+      }) as types.VariableDeclaration;
+
+      const [node] = path.insertAfter(declaration);
+      path.scope.registerDeclaration(node as NodePath<types.Node>);
+
       hasInsertedJsxLocalVariable = true;
     },
   };
