@@ -1,5 +1,4 @@
-/** @jsx _createElement */
 import React from "react";
-const _createElement = React.createElement;
+const _createElement = /*#__PURE__*/ React.createElement;
 
-const element = _createElement("div", null, "Hello, World!");
+const element = /*#__PURE__*/ _createElement("div", null, "Hello, World!");

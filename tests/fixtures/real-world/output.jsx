@@ -1,33 +1,32 @@
-/** @jsx _createElement */
 import React from "react";
-const _createElement = React.createElement;
+const _createElement = /*#__PURE__*/ React.createElement;
 import logo from "./logo.svg";
 import "./App.css";
 
 function App() {
-  return _createElement(
+  return /*#__PURE__*/ _createElement(
     "div",
     {
       className: "App",
     },
-    _createElement(
+    /*#__PURE__*/ _createElement(
       "header",
       {
         className: "App-header",
       },
-      _createElement("img", {
+      /*#__PURE__*/ _createElement("img", {
         src: logo,
         className: "App-logo",
         alt: "logo",
       }),
-      _createElement(
+      /*#__PURE__*/ _createElement(
         "p",
         null,
         "Edit ",
-        _createElement("code", null, "src/App.js"),
+        /*#__PURE__*/ _createElement("code", null, "src/App.js"),
         " and save to reload.",
       ),
-      _createElement(
+      /*#__PURE__*/ _createElement(
         "a",
         {
           className: "App-link",
