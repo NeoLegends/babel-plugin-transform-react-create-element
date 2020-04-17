@@ -46,9 +46,9 @@ In your `.babelrc`:
 }
 ```
 
-It works by inserting a JSX pragma that points to the local variable. Hence, it needs to run before any JSX compilers. If you're using `@babel/preset-react` everything will work out of the box. If you're using `@babel/plugin-transform-react-jsx` directly, make sure to list this plugin before it.
+It works by translating any found calls to `React.createElement` to use the newly inserted local variable instead.
 
-This plugin _does_ respect any existing JSX pragmas in the file and does not modify them.
+As such, it automatically respects any existing JSX pragmas in the file and does not interfer with their use.
 
 ## Why?
 
