@@ -1,5 +1,10 @@
 .prettierrc
+.travis.yml
 tsconfig.json
+yarn-error.log
+
+*.tar.gz
+*.tgz
 
 src/index.ts
 tests/
