@@ -2,7 +2,6 @@ import { NodePath } from "@babel/core";
 import template from "@babel/template";
 import * as t from "@babel/types";
 
-const PRAGMA_ELEM_NAME = "createElement";
 const LOCAL_VARIABLE_TEMPLATE = template(`
   const %%pragma%% = /*#__PURE__*/ React.createElement;
 `, {
@@ -77,7 +76,7 @@ const getCreateElementAndImport = (
 const insertLocalVariable = (
   importSite: NodePath<t.ImportDefaultSpecifier> | NodePath<t.VariableDeclarator>,
 ): t.Identifier => {
-  const uniqueIdent = importSite.scope.generateUidIdentifier(PRAGMA_ELEM_NAME);
+  const uniqueIdent = importSite.scope.generateUidIdentifier("createElement");
 
   const variableDeclaration = LOCAL_VARIABLE_TEMPLATE({
     pragma: uniqueIdent,
