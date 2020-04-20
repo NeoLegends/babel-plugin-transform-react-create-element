@@ -8,7 +8,7 @@ type ReactImport =
   | NodePath<t.VariableDeclarator>;
 
 const LOCAL_VARIABLE_TEMPLATE = template(
-  "const %%pragma%% = /*#__PURE__*/ React.createElement;",
+  "const %%localIdentifier%% = /*#__PURE__*/ React.createElement;",
   { preserveComments: true },
 );
 
@@ -77,7 +77,7 @@ const insertLocalVariable = (importSite: ReactImport): t.Identifier => {
   const uniqueIdent = importSite.scope.generateUidIdentifier("createElement");
 
   const variableDeclaration = LOCAL_VARIABLE_TEMPLATE({
-    pragma: uniqueIdent,
+    localIdentifier: uniqueIdent,
   }) as t.VariableDeclaration;
 
   const [node] = importSite.parentPath.insertAfter(variableDeclaration);
