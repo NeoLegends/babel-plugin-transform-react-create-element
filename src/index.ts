@@ -70,7 +70,7 @@ const getCreateElementCallAndReactImport = (
     return null;
   }
 
-  return [callee as NodePath<t.MemberExpression>, reactImport];
+  return [callee, reactImport];
 };
 
 const insertLocalVariable = (importSite: ReactImport): t.Identifier => {
