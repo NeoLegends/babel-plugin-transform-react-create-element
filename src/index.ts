@@ -51,7 +51,7 @@ const getReactImport = (path: NodePath<t.Identifier>): ReactImport | null => {
   return null;
 };
 
-const getCreateElementAndImport = (
+const getCreateElementCallAndReactImport = (
   path: NodePath<t.CallExpression>,
 ): [NodePath<t.MemberExpression>, ReactImport] | null => {
   const callee = path.get("callee");
@@ -90,7 +90,7 @@ const transform = () => ({
   name: "transform-create-element",
   visitor: {
     CallExpression(path, state: { localVariableIdent: t.Identifier }) {
-      const data = getCreateElementAndImport(path);
+      const data = getCreateElementCallAndReactImport(path);
 
       if (!data) {
         return;
