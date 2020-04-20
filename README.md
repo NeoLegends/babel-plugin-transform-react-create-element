@@ -36,6 +36,8 @@ const Component = () => (
 
 ## How?
 
+Install via `npm install -D babel-plugin-transform-react-create-element` or `yarn add -D babel-plugin-transform-react-create-element`.
+
 In your `.babelrc`:
 
 ```
