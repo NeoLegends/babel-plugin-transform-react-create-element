@@ -2,15 +2,18 @@ import { NodePath } from "@babel/core";
 import template from "@babel/template";
 import * as t from "@babel/types";
 
+type ReactImport =
+  | NodePath<t.ImportDefaultSpecifier>
+  | NodePath<t.ImportNamespaceSpecifier>
+  | NodePath<t.VariableDeclarator>;
+
 const LOCAL_VARIABLE_TEMPLATE = template(`
   const %%pragma%% = /*#__PURE__*/ React.createElement;
 `, {
   preserveComments: true,
 });
 
-const getReactImport = (
-  path: NodePath<t.Identifier>,
-): NodePath<t.ImportDefaultSpecifier> | NodePath<t.VariableDeclarator> | null => {
+const getReactImport = (path: NodePath<t.Identifier>): ReactImport | null => {
   const binding = path.scope.getBinding(path.node.name);
 
   if (!binding) {
@@ -19,7 +22,10 @@ const getReactImport = (
 
   const bindingPath = binding.path;
 
-  if (bindingPath.isImportDefaultSpecifier()) {
+  if (
+    bindingPath.isImportDefaultSpecifier() ||
+    bindingPath.isImportNamespaceSpecifier()
+  ) {
     const parentPath = bindingPath.parentPath;
 
     if (
@@ -48,12 +54,7 @@ const getReactImport = (
 
 const getCreateElementAndImport = (
   path: NodePath<t.CallExpression>,
-):
-  | [
-      NodePath<t.MemberExpression>,
-      NodePath<t.ImportDefaultSpecifier> | NodePath<t.VariableDeclarator>,
-    ]
-  | null => {
+): [NodePath<t.MemberExpression>, ReactImport] | null => {
   const callee = path.get("callee");
   if (!callee.isMemberExpression()) {
     return null;
@@ -73,9 +74,7 @@ const getCreateElementAndImport = (
   return [callee as NodePath<t.MemberExpression>, reactImport];
 };
 
-const insertLocalVariable = (
-  importSite: NodePath<t.ImportDefaultSpecifier> | NodePath<t.VariableDeclarator>,
-): t.Identifier => {
+const insertLocalVariable = (importSite: ReactImport): t.Identifier => {
   const uniqueIdent = importSite.scope.generateUidIdentifier("createElement");
 
   const variableDeclaration = LOCAL_VARIABLE_TEMPLATE({
