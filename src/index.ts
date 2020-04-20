@@ -7,11 +7,10 @@ type ReactImport =
   | NodePath<t.ImportNamespaceSpecifier>
   | NodePath<t.VariableDeclarator>;
 
-const LOCAL_VARIABLE_TEMPLATE = template(`
-  const %%pragma%% = /*#__PURE__*/ React.createElement;
-`, {
-  preserveComments: true,
-});
+const LOCAL_VARIABLE_TEMPLATE = template(
+  "const %%pragma%% = /*#__PURE__*/ React.createElement;",
+  { preserveComments: true },
+);
 
 const getReactImport = (path: NodePath<t.Identifier>): ReactImport | null => {
   const binding = path.scope.getBinding(path.node.name);
