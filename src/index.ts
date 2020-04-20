@@ -64,7 +64,11 @@ const getCreateElementCallAndReactImport = (
     return null;
   }
 
-  const object = callee.get("object") as NodePath<t.Identifier>;
+  const object = callee.get("object") as NodePath<t.Node>;
+  if (!object.isIdentifier()) {
+    return null;
+  }
+
   const reactImport = getReactImport(object);
   if (!reactImport) {
     return null;
